@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.worldchef">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/worldcheficon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activities.SplashScreenActivity"></activity>
+        <activity android:name=".Activities.QuizStartScreenActivity" />
+        <activity android:name=".Activities.QuizActivity" />
+        <activity android:name=".Fragments.FavouritesFragment" />
+        <activity android:name=".Activities.MealDetailActivity" />
+        <activity android:name=".Fragments.MealFragment" />
+        <activity android:name=".Activities.RegisterActivity" />
+        <activity android:name=".Fragments.LearnFragment" />
+        <activity android:name=".Fragments.NavigationFragment" />
+        <activity android:name=".Activities.MainScreenActivity" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

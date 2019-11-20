@@ -1,0 +1,398 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "22e24642957331709d06639ee9d46701",
+    "entities": [
+      {
+        "tableName": "User",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `password` TEXT, `firstName` TEXT, `lastName` TEXT, `email` TEXT, `gender` TEXT, `points` INTEGER NOT NULL, PRIMARY KEY(`username`))",
+        "fields": [
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "password",
+            "columnName": "password",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "firstName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "lastName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "points",
+            "columnName": "points",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "username"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Category",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idCategory` INTEGER NOT NULL, `strCategory` TEXT, `strCategoryThumb` TEXT, PRIMARY KEY(`idCategory`))",
+        "fields": [
+          {
+            "fieldPath": "idCategory",
+            "columnName": "idCategory",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strCategory",
+            "columnName": "strCategory",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strCategoryThumb",
+            "columnName": "strCategoryThumb",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idCategory"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "MealFromCategory",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idMeal` INTEGER NOT NULL, `strMeal` TEXT, `strMealThumb` TEXT, PRIMARY KEY(`idMeal`))",
+        "fields": [
+          {
+            "fieldPath": "idMeal",
+            "columnName": "idMeal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strMeal",
+            "columnName": "strMeal",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMealThumb",
+            "columnName": "strMealThumb",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idMeal"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Meal",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idMeal` INTEGER NOT NULL, `strMeal` TEXT, `strCategory` TEXT, `strArea` TEXT, `strInstructions` TEXT, `strMealThumb` TEXT, `strYoutube` TEXT, `strIngredient1` TEXT, `strIngredient2` TEXT, `strIngredient3` TEXT, `strIngredient4` TEXT, `strIngredient5` TEXT, `strIngredient6` TEXT, `strIngredient7` TEXT, `strIngredient8` TEXT, `strIngredient9` TEXT, `strIngredient10` TEXT, `strIngredient11` TEXT, `strIngredient12` TEXT, `strIngredient13` TEXT, `strIngredient14` TEXT, `strIngredient15` TEXT, `strIngredient16` TEXT, `strIngredient17` TEXT, `strIngredient18` TEXT, `strIngredient19` TEXT, `strIngredient20` TEXT, PRIMARY KEY(`idMeal`))",
+        "fields": [
+          {
+            "fieldPath": "idMeal",
+            "columnName": "idMeal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strMeal",
+            "columnName": "strMeal",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strCategory",
+            "columnName": "strCategory",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strArea",
+            "columnName": "strArea",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strInstructions",
+            "columnName": "strInstructions",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMealThumb",
+            "columnName": "strMealThumb",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strYoutube",
+            "columnName": "strYoutube",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient1",
+            "columnName": "strIngredient1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient2",
+            "columnName": "strIngredient2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient3",
+            "columnName": "strIngredient3",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient4",
+            "columnName": "strIngredient4",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient5",
+            "columnName": "strIngredient5",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient6",
+            "columnName": "strIngredient6",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient7",
+            "columnName": "strIngredient7",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient8",
+            "columnName": "strIngredient8",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient9",
+            "columnName": "strIngredient9",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient10",
+            "columnName": "strIngredient10",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient11",
+            "columnName": "strIngredient11",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient12",
+            "columnName": "strIngredient12",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient13",
+            "columnName": "strIngredient13",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient14",
+            "columnName": "strIngredient14",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient15",
+            "columnName": "strIngredient15",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient16",
+            "columnName": "strIngredient16",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient17",
+            "columnName": "strIngredient17",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient18",
+            "columnName": "strIngredient18",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient19",
+            "columnName": "strIngredient19",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient20",
+            "columnName": "strIngredient20",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idMeal"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Favourite",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`favouriteId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT, `mealName` TEXT, `mealImageUrl` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "favouriteId",
+            "columnName": "favouriteId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mealName",
+            "columnName": "mealName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mealImageUrl",
+            "columnName": "mealImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "favouriteId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Quiz",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`question` TEXT NOT NULL, `option1` TEXT, `option2` TEXT, `option3` TEXT, `answerNumber` INTEGER NOT NULL, `category` TEXT, PRIMARY KEY(`question`))",
+        "fields": [
+          {
+            "fieldPath": "question",
+            "columnName": "question",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "option1",
+            "columnName": "option1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "option2",
+            "columnName": "option2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "option3",
+            "columnName": "option3",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "answerNumber",
+            "columnName": "answerNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "question"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '22e24642957331709d06639ee9d46701')"
+    ]
+  }
+}
