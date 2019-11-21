@@ -12,10 +12,8 @@ import com.example.worldchef.Fragments.NavigationFragment;
 import com.example.worldchef.Fragments.SocialFragment;
 import com.example.worldchef.Models.User;
 import com.example.worldchef.R;
-//This is gonna mf work
-//abcdef
 public class MainScreenActivity extends AppCompatActivity {
-//testingcommitA1
+//pushing correct version
     //This is the main screen
     public static String username;
 
