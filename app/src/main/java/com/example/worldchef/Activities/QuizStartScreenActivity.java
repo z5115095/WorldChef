@@ -3,11 +3,13 @@ package com.example.worldchef.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +40,8 @@ public class QuizStartScreenActivity extends AppCompatActivity implements Adapte
     private static final int CODE_QUIZ_RESULT = 1;
     private User currentUser;
     private int score;
+    private ImageView profilePicture;
+    private TextView usernameTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,8 @@ public class QuizStartScreenActivity extends AppCompatActivity implements Adapte
         mStartQuizButton = findViewById(R.id.quiz_start_button);
         mCategorySpinner = findViewById(R.id.quiz_category_spinner);
         totalPointsTxtView = findViewById(R.id.quiz_start_user_score);
+        profilePicture = findViewById(R.id.social_profile_pic2);
+        usernameTxt = findViewById(R.id.social_username2);
 
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.Categories, android.R.layout.simple_spinner_item);
@@ -607,6 +613,20 @@ public class QuizStartScreenActivity extends AppCompatActivity implements Adapte
 
         currentUser = user;
         totalPointsTxtView.setText("Total Michelin stars: " + currentUser.getPoints());
+        //set the display picture and name of user
+        usernameTxt.setText(currentUser.getUsername());
+
+        //change dp depending on gender selected:
+        if (currentUser.getGender().contentEquals("Male")) {
+            profilePicture.setImageResource(R.drawable.man);
+        } else if (currentUser.getGender().contentEquals("Female")) {
+
+            profilePicture.setImageResource(R.drawable.girl);
+        } else {
+            profilePicture.setImageResource(R.drawable.defaultprofile);
+        }
+
+
 
     }
 

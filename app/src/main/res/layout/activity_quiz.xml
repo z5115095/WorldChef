@@ -4,106 +4,116 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/quizbackground"
+    android:background="@drawable/quizscreenbackgroundnew"
     tools:context=".Activities.QuizStartScreenActivity">
+
+    <ImageView
+        android:id="@+id/quiz_longsquareshape"
+        android:layout_width="367dp"
+        android:layout_height="603dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/longsquareshape" />
 
     <TextView
         android:id="@+id/quiz_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
         android:text="@string/quiz_score"
         android:textColor="#505050"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/quiz_longsquareshape"
+        app:layout_constraintTop_toTopOf="@+id/quiz_longsquareshape" />
 
     <TextView
         android:id="@+id/quiz_questionCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
         android:text="@string/quiz_question_count"
         android:textColor="#505050"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/quiz_longsquareshape"
         app:layout_constraintTop_toBottomOf="@+id/quiz_score" />
 
     <TextView
         android:id="@+id/quiz_countdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="40dp"
         android:text="@string/quiz_countdown"
         android:textColor="#000000"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/quiz_longsquareshape"
+        app:layout_constraintTop_toTopOf="@+id/quiz_longsquareshape" />
 
     <RadioGroup
         android:id="@+id/quiz_rg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/quiz_longsquareshape"
+        app:layout_constraintStart_toStartOf="@+id/quiz_longsquareshape"
         app:layout_constraintTop_toBottomOf="@+id/quiz_questions">
 
         <RadioButton
             android:id="@+id/quiz_rb1"
-            android:layout_width="150dp"
+            android:layout_width="300dp"
+            android:layout_height="42dp"
             android:layout_margin="10dp"
-            android:paddingStart="10dp"
-            android:layout_height="40dp"
             android:background="@drawable/greyquizoption"
+            android:paddingStart="10dp"
             android:text="@string/quiz_mc_options" />
 
         <RadioButton
             android:id="@+id/quiz_rb2"
-            android:layout_width="150dp"
-            android:layout_margin="10dp"
-            android:paddingStart="10dp"
+            android:layout_width="300dp"
             android:layout_height="40dp"
+            android:layout_margin="10dp"
             android:background="@drawable/greyquizoption"
+            android:paddingStart="10dp"
             android:text="@string/quiz_mc_options" />
 
         <RadioButton
             android:id="@+id/quiz_rb3"
-            android:layout_margin="10dp"
-            android:layout_width="150dp"
+            android:layout_width="300dp"
             android:layout_height="40dp"
-            android:paddingStart="10dp"
+            android:layout_margin="10dp"
             android:background="@drawable/greyquizoption"
+            android:paddingStart="10dp"
             android:text="@string/quiz_mc_options" />
     </RadioGroup>
 
     <TextView
         android:id="@+id/quiz_questions"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="25dp"
         android:text="@string/quiz_mc_questions"
         android:textColor="#000000"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/quiz_longsquareshape"
+        app:layout_constraintStart_toStartOf="@+id/quiz_longsquareshape"
         app:layout_constraintTop_toBottomOf="@+id/quiz_questionCount" />
 
     <Button
         android:id="@+id/quiz_confirm_btn"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginStart="110dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/yellowroundbutton"
         android:text="@string/quiz_mc_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quiz_rg"
-        />
+        app:layout_constraintEnd_toEndOf="@+id/quiz_longsquareshape"
+        app:layout_constraintStart_toStartOf="@+id/quiz_longsquareshape"
+        app:layout_constraintTop_toBottomOf="@+id/quiz_rg" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
