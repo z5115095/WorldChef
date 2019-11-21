@@ -12,7 +12,7 @@ import com.example.worldchef.Fragments.NavigationFragment;
 import com.example.worldchef.Fragments.SocialFragment;
 import com.example.worldchef.Models.User;
 import com.example.worldchef.R;
-
+//This is gonna mf work
 public class MainScreenActivity extends AppCompatActivity {
 //testingcommitA1
     //This is the main screen
