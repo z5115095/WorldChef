@@ -19,29 +19,74 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.worldchef.Activities.MainScreenActivity;
 import com.example.worldchef.AppDatabase;
+import com.example.worldchef.AsyncTasks.GetUserByUsernameAsyncTask;
 import com.example.worldchef.Fragments.LearnFragment;
 import com.example.worldchef.Fragments.MealFragment;
 import com.example.worldchef.Models.Categories;
 import com.example.worldchef.Models.User;
 import com.example.worldchef.R;
+import com.example.worldchef.TaskDelegates.AsyncTaskUserDelegate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.worldchef.Activities.MainScreenActivity.username;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> implements Filterable {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> implements Filterable, AsyncTaskUserDelegate {
 
     //List of categories
     public List<Categories.Category> categories;
 
     private List<Categories.Category> categoryListFull;
+    private User currentUser;
+    private int currentPoints;
 
 
 
     public void setData(List<Categories.Category> categoriesToAdapt) {
         this.categories = categoriesToAdapt;
         categoryListFull = new ArrayList<>(categoriesToAdapt);
+    }
+
+    @Override
+    public void handleInsertUserResult(String result) {
+
+    }
+
+    @Override
+    public void handleGetUserResult(User user) {
+
+    }
+
+    @Override
+    public void handleGetAllUsersResult(List<User> users) {
+
+    }
+
+    @Override
+    public void handleGetUsernamesResult(List<String> usernames) {
+
+    }
+
+    @Override
+    public void handleGetUserByUserName(User user) {
+
+        //set current points of the user
+
+        currentUser = user;
+        currentPoints = currentUser.getPoints();
+
+
+    }
+
+    private void checkForLocks(final CategoryViewHolder holder, final int position) {
+
+
+    }
+
+    @Override
+    public void handleInsertPoints(String result) {
+
     }
 
     //Creating viewholder
@@ -78,29 +123,41 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.mCategoryName.setText(currentCategory.getStrCategory());
         String imageUrl = currentCategory.getStrCategoryThumb();
 
-        //get points of user
-        User currentUser = AppDatabase.getInstance(holder.mCategoryName.getContext()).userDao().getUserByUsername(username);
-        final int currentPoints = currentUser.getPoints();
+        //get points of user for unlock system
+        AppDatabase db = AppDatabase.getInstance(holder.mCategoryName.getContext());
+        GetUserByUsernameAsyncTask getUserByUsernameAsyncTask = new GetUserByUsernameAsyncTask();
+        getUserByUsernameAsyncTask.setDatabase(db);
+        getUserByUsernameAsyncTask.setDelegate(CategoryAdapter.this);
+        getUserByUsernameAsyncTask.execute(username);
 
-        //if user has less than 5 points, then set goat as locked
-        if (currentPoints <5 && currentCategory.getStrCategory().contentEquals("Goat")) {
+        //Set the image
+
+        //If user that has less than the applicable points, display the locked photo
+        //Unlockable categories: Miscellaneous, goat, and Dessert
+        if (currentPoints <10 && currentCategory.getStrCategory().contentEquals("Goat")) {
+            holder.mCategoryImage.setImageResource(R.drawable.lockedcategory);
+        } else if(currentPoints <20 && currentCategory.getStrCategory().contentEquals("Dessert")) {
+            holder.mCategoryImage.setImageResource(R.drawable.lockedcategory);
+        } else if (currentPoints <30 && currentCategory.getStrCategory().contentEquals("Miscellaneous")) {
             holder.mCategoryImage.setImageResource(R.drawable.lockedcategory);
         } else {
             Glide.with(holder.mCategoryName.getContext()).load(imageUrl).into(holder.mCategoryImage);
-
         }
-
-
 
         //Clicking will transition to another fragment.
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                //If user that has less than 5 points clicks on it, then they won't be able to access.
+                //If user that has less than the applicable points, they are unable to access these categories
+                //Unlockable categories: Miscellaneous, goat, and Dessert
 
-                if (currentPoints < 5 && currentCategory.getStrCategory().contentEquals("Goat")) {
-                    Toast.makeText(holder.mCategoryName.getContext(),"Must have at least 5 Michelin stars to unlock!",Toast.LENGTH_SHORT).show();
+                if (currentPoints < 10 && currentCategory.getStrCategory().contentEquals("Goat")) {
+                    Toast.makeText(holder.mCategoryName.getContext(),"Must have at least 10 Michelin stars to unlock!",Toast.LENGTH_SHORT).show();
+                } else if(currentPoints <20  && currentCategory.getStrCategory().contentEquals("Dessert")) {
+                    Toast.makeText(holder.mCategoryName.getContext(),"Must have at least 20 Michelin stars to unlock!",Toast.LENGTH_SHORT).show();
+                } else if (currentPoints < 30 && currentCategory.getStrCategory().contentEquals("Miscellaneous")) {
+                    Toast.makeText(holder.mCategoryName.getContext(),"Must have at least 30 Michelin stars to unlock!",Toast.LENGTH_SHORT).show();
                 } else {
 
                     Fragment mealFragment = new MealFragment();
@@ -168,4 +225,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         }
     };
+
+
 }

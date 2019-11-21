@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">WorldChef</string>
     <string name="username">Username</string>
-    <string name="password">Password</string>
+    <string name="password">password</string>
     <string name="register_gender">Gender: </string>
     <string name="register_notice">Don\'t have an acccount?</string>
     <string name="register">REGISTER NOW!</string>
@@ -48,13 +48,11 @@
     <string name="social_cooklevel">Current Cook level:</string>
     <string name="social_totalstars">Total Michelin Stars</string>
     <string name="social_leaderboard">LEADERBOARD</string>
-    <string name="social_cookplayer">Player Username</string>
+    <string name="social_cookplayer">Username</string>
     <string-array name="Categories">
         <item>Beef</item>
         <item>Chicken</item>
-        <item>Dessert</item>
         <item>Lamb</item>
-        <item>Miscellaneous</item>
         <item>Pasta</item>
         <item>Pork</item>
         <item>Seafood</item>
@@ -62,6 +60,5 @@
         <item>Vegan</item>
         <item>Vegetarian</item>
         <item>Breakfast</item>
-        <item>Goat</item>
     </string-array>
 </resources>

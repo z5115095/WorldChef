@@ -15,9 +15,14 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.worldchef.Adapters.MealAdapter;
 import com.example.worldchef.AppDatabase;
+import com.example.worldchef.AsyncTasks.GetCategoryByNameAsyncTask;
+import com.example.worldchef.AsyncTasks.GetMealCategoryListAsyncTask;
+import com.example.worldchef.AsyncTasks.InsertMealCategoryAsyncTask;
 import com.example.worldchef.Models.Categories;
 import com.example.worldchef.Models.MealsPerCategory;
 import com.example.worldchef.R;
+import com.example.worldchef.TaskDelegates.AsyncTaskCategoryDelegate;
+import com.example.worldchef.TaskDelegates.AsyncTaskMealsCategoryDelegate;
 import com.google.gson.Gson;
 
 import android.content.Context;
@@ -32,29 +37,32 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class MealFragment extends Fragment {
+public class MealFragment extends Fragment implements AsyncTaskCategoryDelegate, AsyncTaskMealsCategoryDelegate {
 
     private RecyclerView recyclerView;
     private ImageView mCategoryImage;
     private TextView mCategoryName;
     private SearchView mealSearchView;
     private CardView mCardView;
+    private Categories.Category thisCategory;
+    private MealAdapter mealAdapter;
+    private List<MealsPerCategory.MealFromCategory> mealList;
 
     @Override
     public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container,
                               @Nullable Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.meal_fragment, container, false);
+        final View view = inflater.inflate(R.layout.fragment_meal, container, false);
 
         //Linking to layout
         recyclerView = view.findViewById(R.id.meal_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        final MealAdapter mealAdapter = new MealAdapter();
+        mealAdapter = new MealAdapter();
 
         mealSearchView = view.findViewById(R.id.meal_sv);
-        mCardView = view.findViewById(R.id.meal_cardview);
+        //mCardView = view.findViewById(R.id.meal_cardview);
         mCategoryImage = view.findViewById(R.id.categorydetail_cardimage);
         mCategoryName = view.findViewById(R.id.categorydetail_name);
         mealSearchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -77,15 +85,18 @@ public class MealFragment extends Fragment {
         });
 
 
-        //Extract the Meal category ID from the previous fragment
+        //Extract the Meal category name from the previous fragment
         String categoryName = getArguments().getString("strCategory");
 
-        //Set the category name and image
-        Categories.Category thisCategory = AppDatabase.getInstance(view.getContext()).categoryDao().getCategoryByName(categoryName);
-        mCategoryName.setText(categoryName);
-        String categoryImageUrl =  thisCategory.getStrCategoryThumb();
-        Glide.with(mCategoryName.getContext()).load(categoryImageUrl).into(mCategoryImage);
+        //Get the category via category name so then we can apply the image and name on the UI
+        final AppDatabase db = AppDatabase.getInstance(view.getContext());
+        GetCategoryByNameAsyncTask getCategoryByIdAsyncTask = new GetCategoryByNameAsyncTask();
+        getCategoryByIdAsyncTask.setDatabase(db);
+        getCategoryByIdAsyncTask.setDelegate(MealFragment.this);
+        getCategoryByIdAsyncTask.execute(categoryName);
 
+
+        //get the recycler view going
         //Use API to call upon the list of meals within that category
         String mealUrl = "https://www.themealdb.com/api/json/v1/1/filter.php?c=" + categoryName;
 
@@ -100,19 +111,18 @@ public class MealFragment extends Fragment {
 
                 MealsPerCategory thisMealCategory = gson.fromJson(response, MealsPerCategory.class);
 
-                List<MealsPerCategory.MealFromCategory> mealList = thisMealCategory.getMeals();
+                mealList = thisMealCategory.getMeals();
+
+                //Convert to array so we can use async task
+                MealsPerCategory.MealFromCategory[] mealsArray = mealList.toArray(new MealsPerCategory.MealFromCategory[mealList.size()]);
 
                 //Add this into my database
-                AppDatabase.getInstance(view.getContext()).mealsFromCategoryDao().insertMealList(mealList);
+                InsertMealCategoryAsyncTask insertMealCategoryAsyncTask = new InsertMealCategoryAsyncTask();
+                insertMealCategoryAsyncTask.setDatabase(db);
+                insertMealCategoryAsyncTask.setDelegate(MealFragment.this);
+                insertMealCategoryAsyncTask.execute(mealsArray);
 
-                //Extract list of categories from database instead - need get meals from WHERE category...
-                List<MealsPerCategory.MealFromCategory> mealListDatabase = AppDatabase.getInstance(view.getContext()).mealsFromCategoryDao()
-                        .getMealsFromCategory();
 
-
-                mealAdapter.setData(mealList);
-
-                recyclerView.setAdapter(mealAdapter);
 
                 requestQueue.stop();
 
@@ -132,6 +142,54 @@ public class MealFragment extends Fragment {
         requestQueue.add(stringRequest);
 
 
+
         return view;
+    }
+
+    @Override
+    public void handleGetAllCategoriesTask(List<Categories.Category> categories) {
+
+    }
+
+    @Override
+    public void handleGetCategoryByNameTask(Categories.Category category) {
+        thisCategory = category;
+        String categoryName = thisCategory.getStrCategory();
+        mCategoryName.setText(categoryName);
+        String categoryImageUrl =  thisCategory.getStrCategoryThumb();
+        Glide.with(mCategoryName.getContext()).load(categoryImageUrl).into(mCategoryImage);
+
+
+    }
+
+
+    @Override
+    public void handleInsertCategoryListTask(String result) {
+
+    }
+
+    @Override
+    public void handleGetMealCategoryListTask(List<MealsPerCategory.MealFromCategory> meals) {
+
+        //We now have a list of meals that we want to display on recycler view
+        meals = mealList;
+        mealAdapter.setData(meals);
+        recyclerView.setAdapter(mealAdapter);
+    }
+
+    @Override
+    public void handleInsertMealCategoryTask(String result) {
+
+        System.out.println(result);
+        //Once we have inserted the meals of the category into the database, we need to extract it.
+        //Extract list of categories from database instead - need get meals from WHERE category...
+        Context context = getContext();
+        AppDatabase db = AppDatabase.getInstance(context);
+        GetMealCategoryListAsyncTask getMealCategoryListAsyncTask = new GetMealCategoryListAsyncTask();
+        getMealCategoryListAsyncTask.setDatabase(db);
+        getMealCategoryListAsyncTask.setDelegate(MealFragment.this);
+        getMealCategoryListAsyncTask.execute();
+
+
     }
 }

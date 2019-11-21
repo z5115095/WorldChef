@@ -80,6 +80,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
                 Context context = view.getContext();
 
                 Intent explicitIntent = new Intent(context, MealDetailActivity.class);
+                explicitIntent.putExtra("idMeal", currentFavourite.getMealId());
                 explicitIntent.putExtra("strMeal", currentFavourite.getMealName());
                 context.startActivity(explicitIntent);
 

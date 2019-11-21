@@ -16,9 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.worldchef.AppDatabase;
+import com.example.worldchef.AsyncTasks.GetQuestionsByCategoryAsyncTask;
 import com.example.worldchef.Models.Quiz;
 import com.example.worldchef.Models.User;
 import com.example.worldchef.R;
+import com.example.worldchef.TaskDelegates.AsyncTaskQuizDelegate;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +28,7 @@ import java.util.Locale;
 
 import static com.example.worldchef.Activities.MainScreenActivity.username;
 
-public class QuizActivity extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity implements AsyncTaskQuizDelegate {
 
     //Quiz implementation adapted from https://www.youtube.com/watch?v=tlgrX3HF6AI
     //Reference back to quiz start screen adapted from: https://www.youtube.com/watch?v=y1FxIOFuIAs
@@ -83,13 +85,12 @@ public class QuizActivity extends AppCompatActivity {
 
         //Grab list of questions by category
         AppDatabase db = AppDatabase.getInstance(this);
-        questionList = db.quizDao().getAllQuestionsByCategory(category);
-        questionCountTotal = questionList.size();
+        GetQuestionsByCategoryAsyncTask getQuestionsByCategoryAsyncTask = new GetQuestionsByCategoryAsyncTask();
+        getQuestionsByCategoryAsyncTask.setDatabase(db);
+        getQuestionsByCategoryAsyncTask.setDelegate(QuizActivity.this);
+        getQuestionsByCategoryAsyncTask.execute(category);
 
-        //Randomise order of the questions
-        Collections.shuffle(questionList);
 
-        displayNextQuestion();
 
         //Clicking submit answer
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -268,4 +269,27 @@ public class QuizActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void handleInsertQuestionTask(String result) {
+
+    }
+
+    @Override
+    public void handleGetQuestionCountTask(long count) {
+
+    }
+
+    @Override
+    public void handleGetQuestionTask(List<Quiz> questions) {
+
+        questionList = questions;
+        questionCountTotal = questionList.size();
+
+        //Randomise order of the questions
+        Collections.shuffle(questionList);
+
+        //Call next question
+        displayNextQuestion();
+
+    }
 }

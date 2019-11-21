@@ -14,14 +14,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.worldchef.AppDatabase;
+import com.example.worldchef.AsyncTasks.InsertCategoryListAsyncTask;
 import com.example.worldchef.MainActivity;
 import com.example.worldchef.Models.Categories;
 import com.example.worldchef.R;
+import com.example.worldchef.TaskDelegates.AsyncTaskCategoryDelegate;
 import com.google.gson.Gson;
 
 import java.util.List;
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity implements AsyncTaskCategoryDelegate {
 
     //Splash screen adapted from https://www.youtube.com/watch?v=jXtof6OUtcE
 
@@ -52,11 +54,14 @@ public class SplashScreenActivity extends AppCompatActivity {
                 Categories thisCategories = gson.fromJson(response, Categories.class);
 
                 List<Categories.Category> categoryList = thisCategories.getCategories();
+                Categories.Category[] categoryArray = categoryList.toArray(new Categories.Category[categoryList.size()]);
 
-                //Add this into my database
-                AppDatabase.getInstance(SplashScreenActivity.this).categoryDao().insertCategoryList(categoryList);
-
-
+                //Add list of categories into my database - Do this so it can be loaded up beforehand in mainscreen
+                AppDatabase db = AppDatabase.getInstance(SplashScreenActivity.this);
+                InsertCategoryListAsyncTask insertCategoryListAsyncTask = new InsertCategoryListAsyncTask();
+                insertCategoryListAsyncTask.setDatabase(db);
+                insertCategoryListAsyncTask.setDelegate(SplashScreenActivity.this);
+                insertCategoryListAsyncTask.execute(categoryArray);
                 requestQueue.stop();
 
 
@@ -87,4 +92,21 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
 }
+
+    @Override
+    public void handleGetAllCategoriesTask(List<Categories.Category> categories) {
+
+    }
+
+    @Override
+    public void handleGetCategoryByNameTask(Categories.Category category) {
+
+    }
+
+
+    @Override
+    public void handleInsertCategoryListTask(String result) {
+
+        System.out.println(result);
+    }
 };

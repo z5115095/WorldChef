@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,43 +14,92 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.worldchef.Adapters.SocialAdapter;
 import com.example.worldchef.AppDatabase;
+import com.example.worldchef.AsyncTasks.GetAllUsersAsyncTask;
+import com.example.worldchef.AsyncTasks.GetUserByUsernameAsyncTask;
 import com.example.worldchef.Models.User;
 import com.example.worldchef.R;
+import com.example.worldchef.TaskDelegates.AsyncTaskUserDelegate;
 
 import java.util.List;
 
 import static com.example.worldchef.Activities.MainScreenActivity.username;
 
-public class SocialFragment extends Fragment {
+public class SocialFragment extends Fragment implements AsyncTaskUserDelegate {
 
     private TextView mUsername;
     private RecyclerView socialRecyclerView;
     private TextView mUserLevel;
     private TextView mUserPoints;
-    private Button mAddPointsButton;
     private ImageView mProfilePicture;
-
+    private User currentUser;
+    private List<User> userList;
+    private SocialAdapter socialAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.social_fragment, container, false);
+        final View view = inflater.inflate(R.layout.fragment_social, container, false);
 
         mUsername = view.findViewById(R.id.social_username);
         socialRecyclerView = view.findViewById(R.id.social_leaderboardrv);
-        mUserLevel = view.findViewById(R.id.social_cooklevel);
+       // mUserLevel = view.findViewById(R.id.social_cooklevel);
         mUserPoints = view.findViewById(R.id.social_points);
         mProfilePicture = view.findViewById(R.id.social_profile_pic);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         socialRecyclerView.setLayoutManager(layoutManager);
 
-        final SocialAdapter socialAdapter = new SocialAdapter();
+        socialAdapter = new SocialAdapter();
 
-        //Extract bundle
-        //String username = getArguments().getString("username");
+        //get the username
         AppDatabase db = AppDatabase.getInstance(view.getContext());
-        final User currentUser = db.userDao().getUserByUsername(username);
+        GetUserByUsernameAsyncTask getUserByUsernameAsyncTask = new GetUserByUsernameAsyncTask();
+        getUserByUsernameAsyncTask.setDatabase(db);
+        getUserByUsernameAsyncTask.setDelegate(SocialFragment.this);
+        getUserByUsernameAsyncTask.execute(username);
+
+
+        //Get list of all users in ascending order by points
+        GetAllUsersAsyncTask getAllUsersAsyncTask = new GetAllUsersAsyncTask();
+        getAllUsersAsyncTask.setDatabase(db);
+        getAllUsersAsyncTask.setDelegate(SocialFragment.this);
+        getAllUsersAsyncTask.execute();
+
+        return view;
+    }
+
+    @Override
+    public void handleInsertUserResult(String result) {
+
+    }
+
+    @Override
+    public void handleGetUserResult(User user) {
+
+    }
+
+    @Override
+    public void handleGetAllUsersResult(List<User> users) {
+        userList = users;
+        socialAdapter.setData(userList);
+        socialRecyclerView.setAdapter(socialAdapter);
+
+    }
+
+    @Override
+    public void handleGetUsernamesResult(List<String> usernames) {
+
+    }
+    @Override
+    public void handleInsertPoints(String result) {
+
+    }
+
+    @Override
+    public void handleGetUserByUserName(User user) {
+
+        //Display all the UI stuff here
+        currentUser = user;
 
         mUsername.setText(currentUser.getUsername());
         mUserPoints.setText(" " + currentUser.getPoints());
@@ -70,28 +118,5 @@ public class SocialFragment extends Fragment {
             mProfilePicture.setImageResource(R.drawable.defaultprofile);
         }
 
-
-        //Grab data from database:
-
-        List<User> userList = AppDatabase.getInstance(view.getContext()).userDao().getAllUsers();
-        socialAdapter.setData(userList);
-        socialRecyclerView.setAdapter(socialAdapter);
-
-//        mAddPointsButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                //Add points as a test then refresh
-//                AppDatabase.getInstance(view.getContext()).userDao().addPoints(50,
-//                        currentUser.getPoints(),currentUser.getUsername());
-//
-//
-//            }
-//
-//            });
-
-
-
-        return view;
     }
 }

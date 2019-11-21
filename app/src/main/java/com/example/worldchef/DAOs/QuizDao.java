@@ -15,7 +15,7 @@ public interface QuizDao {
 
     //Insert question
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    public void insertQuestion (Quiz quiz);
+    public void insertQuestionList (List<Quiz> quizzes);
 
     //Are there questions in this quiz already?
     @Query("SELECT COUNT(*) FROM QUIZ")

@@ -12,12 +12,22 @@ public class Favourite {
     private String username;
     private String mealName;
     private String mealImageUrl;
+    private int mealId;
 
-    public Favourite(int favouriteId, String username, String mealName, String mealImageUrl) {
+    public Favourite(int favouriteId, String username, String mealName, String mealImageUrl, int mealId) {
         this.favouriteId = favouriteId;
         this.username = username;
         this.mealName = mealName;
         this.mealImageUrl = mealImageUrl;
+        this.mealId = mealId;
+    }
+
+    public int getMealId() {
+        return mealId;
+    }
+
+    public void setMealId(int mealId) {
+        this.mealId = mealId;
     }
 
     public int getFavouriteId() {

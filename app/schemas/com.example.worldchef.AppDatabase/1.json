@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "22e24642957331709d06639ee9d46701",
+    "identityHash": "acb8a04b2f12f61b34e33134e60c5ebc",
     "entities": [
       {
         "tableName": "User",
@@ -302,7 +302,7 @@
       },
       {
         "tableName": "Favourite",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`favouriteId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT, `mealName` TEXT, `mealImageUrl` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`favouriteId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT, `mealName` TEXT, `mealImageUrl` TEXT, `mealId` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "favouriteId",
@@ -327,6 +327,12 @@
             "columnName": "mealImageUrl",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "mealId",
+            "columnName": "mealId",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -392,7 +398,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '22e24642957331709d06639ee9d46701')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'acb8a04b2f12f61b34e33134e60c5ebc')"
     ]
   }
 }

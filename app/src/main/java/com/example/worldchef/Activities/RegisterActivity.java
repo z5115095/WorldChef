@@ -15,13 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.worldchef.AppDatabase;
+import com.example.worldchef.AsyncTasks.GetAllUsernamesAsyncTask;
+import com.example.worldchef.AsyncTasks.InsertUserAsyncTask;
 import com.example.worldchef.MainActivity;
 import com.example.worldchef.Models.User;
 import com.example.worldchef.R;
+import com.example.worldchef.TaskDelegates.AsyncTaskUserDelegate;
 
 import java.util.List;
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, AsyncTaskUserDelegate {
 
     private EditText mFirstName;
     private EditText mLastName;
@@ -32,6 +35,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     private EditText mConfirmPassword;
     private Spinner mGenderSpinner;
     private String genderSelected = " ";
+    private List<String> unavaiableUsernames;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,41 +74,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     incompleteRegister(v);
 
                 } else {
+                    AppDatabase db = AppDatabase.getInstance(RegisterActivity.this);
 
-                    //If everything is filled in, check if username is not taken
-                    List<String> unAvailableUsernames = AppDatabase.getInstance(RegisterActivity.this).userDao().getUsernames();
-                    if(unAvailableUsernames.contains(mUsername.getText().toString())) {
-                        userNameTakenToast(v);
-                    } else {
-                        //If username is fine, check if both passwords are correct
-                        if(mPassword.getText().toString().equals(mConfirmPassword.getText().toString())) {
-                            //add to database
-
-                            AppDatabase.getInstance(RegisterActivity.this).userDao().
-                                    insertUser(new User(mUsername.getText().toString(), mPassword.getText().toString(),
-                                            mFirstName.getText().toString(),
-                                            mLastName.getText().toString(), mEmail.getText().toString(), genderSelected, 0));
-
-
-                            //Display toast
-                            cleanRegister(v);
-                            //Switch pages
-
-                            //Move back to login page
-                            Intent intent = new Intent (RegisterActivity.this, MainActivity.class);
-
-                            startActivity(intent);
-
-                        } else {
-                            //Display toast
-                            passwordNotMatch(v);
-                            System.out.println("hello");
-                            System.out.println("this is the username: " + mUsername.getText().toString());
-
-                            System.out.println("this is the passwords" + mConfirmPassword.getText().toString() + " " + mPassword.getText().toString());
-                        }
-
-                    }
+                    //Grab all the usernames to check if the same username doesn't already exist
+                    GetAllUsernamesAsyncTask getAllUsernamesAsyncTask = new GetAllUsernamesAsyncTask();
+                    getAllUsernamesAsyncTask.setDatabase(db);
+                    getAllUsernamesAsyncTask.setDelegate(RegisterActivity.this);
+                    getAllUsernamesAsyncTask.execute();
 
                 }
             }
@@ -117,14 +94,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         Toast.makeText(RegisterActivity.this, "You must fill in all parts of the form!", Toast.LENGTH_SHORT).show();
     }
 
-    public void userNameTakenToast(View v) {
+    public void userNameTakenToast() {
         Toast.makeText(RegisterActivity.this, "Sorry! Username already taken", Toast.LENGTH_SHORT).show();
     }
 
-    public void passwordNotMatch(View v) {
+    public void passwordNotMatch() {
         Toast.makeText(RegisterActivity.this, "Your passwords are not matching", Toast.LENGTH_SHORT).show();
     }
-    public void cleanRegister(View v) {
+    public void cleanRegister() {
         Toast.makeText(RegisterActivity.this, "Congratulations! You have registered", Toast.LENGTH_SHORT).show();
     }
 
@@ -141,6 +118,78 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void handleInsertUserResult(String result) {
+
+        //Once user has successfully been added to user database, then this is executed
+
+        //Display toast
+        cleanRegister();
+        //Switch pages
+
+        //Move back to login page
+        Intent intent = new Intent (RegisterActivity.this, MainActivity.class);
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void handleGetUserResult(User user) {
+
+    }
+
+    @Override
+    public void handleGetAllUsersResult(List<User> users) {
+
+    }
+
+    @Override
+    public void handleGetUsernamesResult(List<String> usernames) {
+
+        this.unavaiableUsernames = usernames;
+        //If everything is filled in, check if username is not taken
+        if(unavaiableUsernames.contains(mUsername.getText().toString())) {
+            userNameTakenToast();
+        } else {
+            //If username is fine, check if both passwords are correct
+            if(mPassword.getText().toString().equals(mConfirmPassword.getText().toString())) {
+                AppDatabase db = AppDatabase.getInstance(RegisterActivity.this);
+
+                //add this user to database
+                InsertUserAsyncTask insertUserAsyncTask = new InsertUserAsyncTask();
+                insertUserAsyncTask.setDatabase(db);
+                insertUserAsyncTask.setDelegate(this);
+                insertUserAsyncTask.execute(new User(mUsername.getText().toString(), mPassword.getText().toString(),
+                        mFirstName.getText().toString(),
+                        mLastName.getText().toString(), mEmail.getText().toString(), genderSelected, 0));
+
+                //Once this is done, handle insertUserResult will now be triggered
+
+
+            } else {
+                //Display toast
+                passwordNotMatch();
+                System.out.println("hello");
+                System.out.println("this is the username: " + mUsername.getText().toString());
+
+                System.out.println("this is the passwords" + mConfirmPassword.getText().toString() + " " + mPassword.getText().toString());
+            }
+
+        }
+
+    }
+
+    @Override
+    public void handleGetUserByUserName(User user) {
+
+
+    }
+
+    @Override
+    public void handleInsertPoints(String result) {
 
     }
 }

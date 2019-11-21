@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Delete;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,8 +19,12 @@ import android.widget.Toast;
 
 import com.example.worldchef.Adapters.FavouriteAdapter;
 import com.example.worldchef.AppDatabase;
+import com.example.worldchef.AsyncTasks.DeleteFavouriteAsyncTask;
+import com.example.worldchef.AsyncTasks.DeleteFavouritesByUserAsyncTask;
+import com.example.worldchef.AsyncTasks.GetFavouritesByUsernameAsyncTask;
 import com.example.worldchef.Models.Favourite;
 import com.example.worldchef.R;
+import com.example.worldchef.TaskDelegates.AsyncTaskFavouriteDelegate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,12 +32,17 @@ import java.util.List;
 
 import static com.example.worldchef.Activities.MainScreenActivity.username;
 
-public class FavouritesFragment extends Fragment {
+public class FavouritesFragment extends Fragment implements AsyncTaskFavouriteDelegate {
+
+    //Swipe to delete functionality was adapted from https://www.youtube.com/watch?v=dYbbTGiZ2sA
 
     private RecyclerView favouriteRecyclerView;
     private TextView mNoFavourites;
     private ImageView mClearAllBin;
+    private List<Favourite> favourites;
+    private ArrayList<Favourite> favouriteArrayList;
 
+    private FavouriteAdapter favouriteAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -48,21 +58,14 @@ public class FavouritesFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         favouriteRecyclerView.setLayoutManager(layoutManager);
 
-        final FavouriteAdapter favouriteAdapter = new FavouriteAdapter();
+         favouriteAdapter = new FavouriteAdapter();
 
         //Grab list of favourited meals based on username
-        List<Favourite> favourites = AppDatabase.getInstance(view.getContext()).favouriteDao().getFavouriteListByUsername(username);
-        //Convert into arraylist
-        final ArrayList<Favourite> favouriteArrayList = new ArrayList<Favourite>(favourites);
-
-        //if there are no favourites
-        if (favouriteArrayList.size() < 1 ) {
-            mNoFavourites.setVisibility(TextView.VISIBLE);
-        }
-
-        favouriteAdapter.setData(favouriteArrayList);
-
-        favouriteRecyclerView.setAdapter(favouriteAdapter);
+        final AppDatabase db = AppDatabase.getInstance(view.getContext());
+        GetFavouritesByUsernameAsyncTask getFavouritesByUsernameAsyncTask = new GetFavouritesByUsernameAsyncTask();
+        getFavouritesByUsernameAsyncTask.setDatabase(db);
+        getFavouritesByUsernameAsyncTask.setDelegate(FavouritesFragment.this);
+        getFavouritesByUsernameAsyncTask.execute(username);
 
 
         //Create a delete by swipe function
@@ -78,19 +81,14 @@ public class FavouritesFragment extends Fragment {
 
                 Context context = getContext();
                 //Delete the favourite
-                AppDatabase.getInstance(context).favouriteDao().deleteFavourite(favouriteAdapter.getFavouriteAt(viewHolder.getAdapterPosition()));
-                //favouriteArrayList.remove(viewHolder.getAdapterPosition());
+                DeleteFavouriteAsyncTask deleteFavouriteAsyncTask = new DeleteFavouriteAsyncTask();
+                deleteFavouriteAsyncTask.setDatabase(db);
+                deleteFavouriteAsyncTask.setDelegate(FavouritesFragment.this);
+                deleteFavouriteAsyncTask.execute(favouriteAdapter.getFavouriteAt(viewHolder.getAdapterPosition()));
 
-                //viewHolder.setIsRecyclable(false);
-                favouriteAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-                Toast.makeText(context, "Favourite deleted", Toast.LENGTH_SHORT).show();
+                //Might be an issue since it is executing it later
+               // favouriteAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
 
-                //Check if favourites is empty after swipe
-                long count = favouriteArrayList.size();
-
-                if(count < 1) {
-                    mNoFavourites.setVisibility((TextView.VISIBLE));
-                }
 
             }
         }).attachToRecyclerView(favouriteRecyclerView);
@@ -100,27 +98,11 @@ public class FavouritesFragment extends Fragment {
         mClearAllBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //Delete
-                AppDatabase.getInstance(mClearAllBin.getContext()).favouriteDao().DeleteFavouritesByUsername(username);
-                //Grab list of favourited meals based on username
-                List<Favourite> favourites = AppDatabase.getInstance(mClearAllBin.getContext()).favouriteDao().getFavouriteListByUsername(username);
-                //Convert into arraylist
-                ArrayList<Favourite> favouriteArrayList = new ArrayList<Favourite>(favourites);
-
-                //if there are no favourites
-                if (favouriteArrayList.size() < 1 ) {
-                    mNoFavourites.setVisibility(TextView.VISIBLE);
-                }
-
-                favouriteAdapter.setData(favouriteArrayList);
-
-                favouriteRecyclerView.setAdapter(favouriteAdapter);
-
-                Toast.makeText(mClearAllBin.getContext(), "Deleted all favourites", Toast.LENGTH_SHORT).show();
-
-
-
+                //Delete all favourites
+                DeleteFavouritesByUserAsyncTask deleteFavouritesByUserAsyncTask = new DeleteFavouritesByUserAsyncTask();
+                deleteFavouritesByUserAsyncTask.setDatabase(db);
+                deleteFavouritesByUserAsyncTask.setDelegate(FavouritesFragment.this);
+                deleteFavouritesByUserAsyncTask.execute(username);
 
             }
         });
@@ -134,15 +116,31 @@ public class FavouritesFragment extends Fragment {
     @Override
     public void  onResume() {
         super.onResume();
-        final FavouriteAdapter favouriteAdapter = new FavouriteAdapter();
+        favouriteAdapter = new FavouriteAdapter();
 
         mNoFavourites.setVisibility(TextView.INVISIBLE);
 
         Context context = getContext();
         //Grab list of favourited meals based on username
-        List<Favourite> favourites = AppDatabase.getInstance(context).favouriteDao().getFavouriteListByUsername(username);
+        final AppDatabase db = AppDatabase.getInstance(context);
+        GetFavouritesByUsernameAsyncTask getFavouritesByUsernameAsyncTask = new GetFavouritesByUsernameAsyncTask();
+        getFavouritesByUsernameAsyncTask.setDatabase(db);
+        getFavouritesByUsernameAsyncTask.setDelegate(FavouritesFragment.this);
+        getFavouritesByUsernameAsyncTask.execute(username);
+
+    }
+
+    @Override
+    public void handleInsertFavouriteTask(String result) {
+
+    }
+
+    @Override
+    public void handleGetFavouritesByUsernameTask(List<Favourite> favouritesList) {
+
+        this.favourites = favouritesList;
         //Convert into arraylist
-        ArrayList<Favourite> favouriteArrayList = new ArrayList<Favourite>(favourites);
+        favouriteArrayList = new ArrayList<Favourite>(favourites);
 
         //if there are no favourites
         if (favouriteArrayList.size() < 1 ) {
@@ -152,6 +150,59 @@ public class FavouritesFragment extends Fragment {
         favouriteAdapter.setData(favouriteArrayList);
 
         favouriteRecyclerView.setAdapter(favouriteAdapter);
+
+    }
+
+    @Override
+    public void handleGetFavouriteByUsernameAndMealNameTask(Favourite favourite) {
+
+    }
+
+    @Override
+    public void handleGetCountOfFavouriteTask(long count) {
+
+    }
+
+    @Override
+    public void handleDeleteFavouritesByUsername(String result) {
+
+        //Once deleted, reset the recycler view
+        System.out.println(result);
+        Context context = getContext();
+        Toast.makeText(context, "Deleted all favourites", Toast.LENGTH_SHORT).show();
+
+        final AppDatabase db = AppDatabase.getInstance(context);
+        GetFavouritesByUsernameAsyncTask getFavouritesByUsernameAsyncTask = new GetFavouritesByUsernameAsyncTask();
+        getFavouritesByUsernameAsyncTask.setDatabase(db);
+        getFavouritesByUsernameAsyncTask.setDelegate(FavouritesFragment.this);
+        getFavouritesByUsernameAsyncTask.execute(username);
+
+    }
+
+    @Override
+    public void handleDeleteFavourite(String result) {
+
+        System.out.println(result);
+        Context context = getContext();
+        //Check if favourites is empty after swipe
+        //Grab all the favourites list again (after specific favourite has been delete)
+        final AppDatabase db = AppDatabase.getInstance(context);
+        GetFavouritesByUsernameAsyncTask getFavouritesByUsernameAsyncTask = new GetFavouritesByUsernameAsyncTask();
+        getFavouritesByUsernameAsyncTask.setDatabase(db);
+        getFavouritesByUsernameAsyncTask.setDelegate(FavouritesFragment.this);
+        getFavouritesByUsernameAsyncTask.execute(username);
+
+
+        long count = favouriteArrayList.size();
+
+        if(count < 1) {
+            mNoFavourites.setVisibility((TextView.VISIBLE));
+        }
+
+        favouriteAdapter.notifyDataSetChanged();
+        Toast.makeText(context, "Favourite deleted", Toast.LENGTH_SHORT).show();
+
+
 
     }
 }
