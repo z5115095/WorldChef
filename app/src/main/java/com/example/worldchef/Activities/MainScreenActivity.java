@@ -14,7 +14,7 @@ import com.example.worldchef.Models.User;
 import com.example.worldchef.R;
 
 public class MainScreenActivity extends AppCompatActivity {
-
+//testingcommitA1
     //This is the main screen
     public static String username;
 
