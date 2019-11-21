@@ -3,6 +3,7 @@ package com.example.worldchef.Adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,12 +27,16 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.SocialView
         public View view;
         public TextView mUsername;
         public TextView mPoints;
+        public TextView mRanking;
+        public ImageView mProfilePic;
 
         public SocialViewHolder(View v) {
             super(v);
             view = v;
             mUsername = v.findViewById(R.id.user_name);
             mPoints = v.findViewById(R.id.user_points);
+            mRanking = v.findViewById(R.id.user_rank);
+            mProfilePic = v.findViewById(R.id.user_picture);
 
         }
 
@@ -52,6 +57,17 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.SocialView
         final User currentUser = users.get(position);
         holder.mUsername.setText(currentUser.getUsername());
         holder.mPoints.setText(" " + currentUser.getPoints());
+        holder.mRanking.setText(" "+ (position + 1));
+
+        //Change profile depending on gender of user
+        if (currentUser.getGender().contentEquals("Male")) {
+            holder.mProfilePic.setImageResource(R.drawable.man);
+        } else if (currentUser.getGender().contentEquals("Female")) {
+
+            holder.mProfilePic.setImageResource(R.drawable.girl);
+        } else {
+            holder.mProfilePic.setImageResource(R.drawable.defaultprofile);
+        }
 
 
     }

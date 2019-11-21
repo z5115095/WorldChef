@@ -55,4 +55,5 @@ public class MainScreenActivity extends AppCompatActivity {
                 (R.id.mainscreen_fragmentB, newFragment).commit();
     }
 
+
 }

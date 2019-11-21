@@ -41,6 +41,7 @@ public class FavouritesFragment extends Fragment implements AsyncTaskFavouriteDe
     private ImageView mClearAllBin;
     private List<Favourite> favourites;
     private ArrayList<Favourite> favouriteArrayList;
+    private ImageView mHelpIcon;
 
     private FavouriteAdapter favouriteAdapter;
     @Nullable
@@ -52,6 +53,7 @@ public class FavouritesFragment extends Fragment implements AsyncTaskFavouriteDe
         favouriteRecyclerView = view.findViewById(R.id.fav_rv);
         mNoFavourites = view.findViewById(R.id.fav_norecipes);
         mClearAllBin = view.findViewById(R.id.fav_delete_all);
+        mHelpIcon = view.findViewById(R.id.fav_help_icon);
 
         //Set no favourites notification as invisible
         mNoFavourites.setVisibility(TextView.INVISIBLE);
@@ -105,6 +107,16 @@ public class FavouritesFragment extends Fragment implements AsyncTaskFavouriteDe
                 deleteFavouritesByUserAsyncTask.execute(username);
 
             }
+        });
+
+        mHelpIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Context context = getContext();
+                Toast.makeText(context, "Swipe to remove meal from favourites", Toast.LENGTH_SHORT).show();
+            }
+
         });
 
 

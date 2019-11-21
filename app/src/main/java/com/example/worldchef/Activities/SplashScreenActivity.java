@@ -28,7 +28,7 @@ public class SplashScreenActivity extends AppCompatActivity implements AsyncTask
     //Splash screen adapted from https://www.youtube.com/watch?v=jXtof6OUtcE
 
 
-    private static int SPLASH_TIME_OUT = 3000;
+    private static int SPLASH_TIME_OUT = 2000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
