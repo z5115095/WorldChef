@@ -1,8 +1,6 @@
 package com.example.worldchef.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.room.Delete;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,7 +11,6 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.worldchef.AppDatabase;
 import com.example.worldchef.AsyncTasks.DeleteFavouriteAsyncTask;
-import com.example.worldchef.AsyncTasks.DeleteFavouritesByUserAsyncTask;
 import com.example.worldchef.AsyncTasks.GetCountFavouriteAsyncTask;
 import com.example.worldchef.AsyncTasks.GetFavByUserAndMealAsyncTask;
 import com.example.worldchef.AsyncTasks.GetMealByIdAsyncTask;
@@ -52,7 +49,9 @@ public class MealDetailActivity extends AppCompatActivity implements AsyncTaskMe
     TextView mealCategory;
     TextView mealIngredients;
     TextView mealInstructions;
-    CardView youtubeCv;
+    ImageView imageOrigin;
+    ImageView imageFood;
+    ImageView youtubeCv;
     FloatingActionButton favouriteActionButton;
     public static String mealName;
     public long favouriteCount;
@@ -62,7 +61,7 @@ public class MealDetailActivity extends AppCompatActivity implements AsyncTaskMe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_detail);
+        setContentView(R.layout.activity_meal_detailab);
 
         appBarImage = findViewById(R.id.app_bar_image);
         collapsingToolbarLayout = findViewById(R.id.mealdetail_collapse_tb);
@@ -72,6 +71,8 @@ public class MealDetailActivity extends AppCompatActivity implements AsyncTaskMe
         mealInstructions = findViewById(R.id.mealdetail_instructions);
         youtubeCv = findViewById(R.id.mealdetail_youtube_cv);
         favouriteActionButton = findViewById(R.id.mealdetail_fav_button);
+        imageOrigin = findViewById(R.id.origin_image);
+        imageFood = findViewById(R.id.food_image);
 
 
         //Grab the meal name that was clicked on.
@@ -256,9 +257,110 @@ public class MealDetailActivity extends AppCompatActivity implements AsyncTaskMe
         currentMeal = meal;
 
         //Display all the relevant content
+
+        //display country name
         mealCountry.setText(currentMeal.getStrArea());
+
+        //display the flags
+        if(currentMeal.getStrArea().contentEquals("Unknown")) {
+
+            //Placeholder
+            imageOrigin.setImageResource(R.drawable.flag_unknown);
+
+        } else if (currentMeal.getStrArea().contentEquals("American")) {
+            imageOrigin.setImageResource(R.drawable.flag_american);
+        } else if (currentMeal.getStrArea().contentEquals("British")) {
+            imageOrigin.setImageResource(R.drawable.flag_british);
+        } else if (currentMeal.getStrArea().contentEquals("Canadian")) {
+            imageOrigin.setImageResource(R.drawable.flag_canadian);
+        } else if (currentMeal.getStrArea().contentEquals("Chinese")) {
+            imageOrigin.setImageResource(R.drawable.flag_china);
+        } else if (currentMeal.getStrArea().contentEquals("Dutch")) {
+            imageOrigin.setImageResource(R.drawable.flag_dutch);
+        } else if (currentMeal.getStrArea().contentEquals("Egyptian")) {
+            imageOrigin.setImageResource(R.drawable.flag_egyptian);
+        } else if (currentMeal.getStrArea().contentEquals("French")) {
+            imageOrigin.setImageResource(R.drawable.flag_french);
+        } else if (currentMeal.getStrArea().contentEquals("Greek")) {
+            imageOrigin.setImageResource(R.drawable.flag_greek);
+        } else if (currentMeal.getStrArea().contentEquals("Indian")) {
+            imageOrigin.setImageResource(R.drawable.flag_indian);
+        } else if (currentMeal.getStrArea().contentEquals("Irish")) {
+            imageOrigin.setImageResource(R.drawable.flag_irish);
+        } else if (currentMeal.getStrArea().contentEquals("Italian")) {
+            imageOrigin.setImageResource(R.drawable.flag_italian);
+        } else if (currentMeal.getStrArea().contentEquals("Jamaican")) {
+            imageOrigin.setImageResource(R.drawable.flag_jamaican);
+        } else if (currentMeal.getStrArea().contentEquals("Japanese")) {
+            imageOrigin.setImageResource(R.drawable.flag_japanese);
+        } else if (currentMeal.getStrArea().contentEquals("Kenyan")) {
+            imageOrigin.setImageResource(R.drawable.flag_kenyan);
+        } else if (currentMeal.getStrArea().contentEquals("Malaysian")) {
+            imageOrigin.setImageResource(R.drawable.flag_malaysian);
+        } else if (currentMeal.getStrArea().contentEquals("Mexican")) {
+            imageOrigin.setImageResource(R.drawable.flag_mexican);
+        } else if (currentMeal.getStrArea().contentEquals("Moroccan")) {
+            imageOrigin.setImageResource(R.drawable.flag_morocco);
+        } else if (currentMeal.getStrArea().contentEquals("Russian")) {
+            imageOrigin.setImageResource(R.drawable.flag_russian);
+        } else if (currentMeal.getStrArea().contentEquals("Spanish")) {
+            imageOrigin.setImageResource(R.drawable.flag_spanish);
+        } else if (currentMeal.getStrArea().contentEquals("Thai")) {
+            imageOrigin.setImageResource(R.drawable.flag_thai);
+        } else if (currentMeal.getStrArea().contentEquals("Tunisian")) {
+            imageOrigin.setImageResource(R.drawable.flag_tunisian);
+        } else if (currentMeal.getStrArea().contentEquals("Turkish")) {
+            imageOrigin.setImageResource(R.drawable.flag_turkish);
+        } else if (currentMeal.getStrArea().contentEquals("Vietnamese")) {
+            imageOrigin.setImageResource(R.drawable.flag_vietnamese);
+        } else {
+
+            //for others
+            imageOrigin.setImageResource(R.drawable.flag_unknown);
+        }
+
+
+//setting for category
         mealCategory.setText(currentMeal.getStrCategory());
         mealInstructions.setText(currentMeal.getStrInstructions());
+
+        if(currentMeal.getStrCategory().contentEquals("Miscellaneous")) {
+
+            //Placeholder
+            imageFood.setImageResource(R.drawable.food_misc);
+
+        } else if (currentMeal.getStrCategory().contentEquals("Beef")) {
+            imageFood.setImageResource(R.drawable.food_beef);
+        } else if (currentMeal.getStrCategory().contentEquals("Breakfast")) {
+            imageFood.setImageResource(R.drawable.food_breakfast);
+        } else if (currentMeal.getStrCategory().contentEquals("Chicken")) {
+            imageFood.setImageResource(R.drawable.food_chicken);
+        } else if (currentMeal.getStrCategory().contentEquals("Dessert")) {
+            imageFood.setImageResource(R.drawable.food_dessert);
+        } else if (currentMeal.getStrCategory().contentEquals("Goat")) {
+            imageFood.setImageResource(R.drawable.food_goat);
+        } else if (currentMeal.getStrCategory().contentEquals("Lamb")) {
+            imageFood.setImageResource(R.drawable.food_lamb);
+        } else if (currentMeal.getStrCategory().contentEquals("Pasta")) {
+            imageFood.setImageResource(R.drawable.food_pasta);
+        } else if (currentMeal.getStrCategory().contentEquals("Pork")) {
+            imageFood.setImageResource(R.drawable.food_pork);
+        } else if (currentMeal.getStrCategory().contentEquals("Seafood")) {
+            imageFood.setImageResource(R.drawable.food_seafood);
+        } else if (currentMeal.getStrCategory().contentEquals("Side")) {
+            imageFood.setImageResource(R.drawable.food_side);
+        } else if (currentMeal.getStrCategory().contentEquals("Starter")) {
+            imageFood.setImageResource(R.drawable.food_starter);
+        } else if (currentMeal.getStrCategory().contentEquals("Vegan")) {
+            imageFood.setImageResource(R.drawable.food_vegan);
+        } else if (currentMeal.getStrCategory().contentEquals("Vegetarian")) {
+            imageFood.setImageResource(R.drawable.food_vego);
+        } else {
+
+            //for others
+            imageFood.setImageResource(R.drawable.food_misc);
+        }
+
 
         String imageUrl = currentMeal.getStrMealThumb();
         System.out.println(imageUrl);

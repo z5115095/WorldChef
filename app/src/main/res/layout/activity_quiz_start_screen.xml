@@ -56,10 +56,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:layout_marginStart="100dp"
         android:text="@string/quiz_start_user_score"
         android:textColor="#CC402D"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/squareshape"
         app:layout_constraintStart_toStartOf="@+id/squareshape"
         app:layout_constraintTop_toBottomOf="@+id/social_username2" />
 
