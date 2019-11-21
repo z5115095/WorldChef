@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/quizbackground"
     tools:context=".Activities.QuizStartScreenActivity">
 
     <TextView
         android:id="@+id/quiz_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="80dp"
         android:text="@string/quiz_score"
-        android:textColor="#000000"
+        android:textColor="#505050"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,10 +23,10 @@
         android:id="@+id/quiz_questionCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="100dp"
         android:layout_marginTop="30dp"
         android:text="@string/quiz_question_count"
-        android:textColor="#000000"
+        android:textColor="#505050"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/quiz_score" />
@@ -34,8 +35,8 @@
         android:id="@+id/quiz_countdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="80dp"
         android:text="@string/quiz_countdown"
         android:textColor="#000000"
         android:textSize="24sp"
@@ -54,20 +55,29 @@
 
         <RadioButton
             android:id="@+id/quiz_rb1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_margin="10dp"
+            android:paddingStart="10dp"
+            android:layout_height="40dp"
+            android:background="@drawable/greyquizoption"
             android:text="@string/quiz_mc_options" />
 
         <RadioButton
             android:id="@+id/quiz_rb2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_margin="10dp"
+            android:paddingStart="10dp"
+            android:layout_height="40dp"
+            android:background="@drawable/greyquizoption"
             android:text="@string/quiz_mc_options" />
 
         <RadioButton
             android:id="@+id/quiz_rb3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:paddingStart="10dp"
+            android:background="@drawable/greyquizoption"
             android:text="@string/quiz_mc_options" />
     </RadioGroup>
 
@@ -85,12 +95,15 @@
 
     <Button
         android:id="@+id/quiz_confirm_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="110dp"
         android:layout_marginTop="50dp"
+        android:background="@drawable/yellowroundbutton"
         android:text="@string/quiz_mc_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quiz_rg" />
+        app:layout_constraintTop_toBottomOf="@+id/quiz_rg"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
