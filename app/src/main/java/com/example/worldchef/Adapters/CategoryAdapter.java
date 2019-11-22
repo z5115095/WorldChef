@@ -136,9 +136,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         //Unlockable categories: Miscellaneous, goat, and Dessert
         if (currentPoints <10 && currentCategory.getStrCategory().contentEquals("Goat")) {
             holder.mCategoryImage.setImageResource(R.drawable.lockedcategory);
-        } else if(currentPoints <20 && currentCategory.getStrCategory().contentEquals("Dessert")) {
+        } else if(currentPoints <20 && currentCategory.getStrCategory().contentEquals("Miscellaneous")) {
             holder.mCategoryImage.setImageResource(R.drawable.lockedcategory);
-        } else if (currentPoints <30 && currentCategory.getStrCategory().contentEquals("Miscellaneous")) {
+        } else if (currentPoints <30 && currentCategory.getStrCategory().contentEquals("Dessert")) {
             holder.mCategoryImage.setImageResource(R.drawable.lockedcategory);
         } else {
             Glide.with(holder.mCategoryName.getContext()).load(imageUrl).into(holder.mCategoryImage);
@@ -154,9 +154,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
                 if (currentPoints < 10 && currentCategory.getStrCategory().contentEquals("Goat")) {
                     Toast.makeText(holder.mCategoryName.getContext(),"Must have at least 10 Michelin stars to unlock!",Toast.LENGTH_SHORT).show();
-                } else if(currentPoints <20  && currentCategory.getStrCategory().contentEquals("Dessert")) {
+                } else if(currentPoints <20  && currentCategory.getStrCategory().contentEquals("Miscellaneous")) {
                     Toast.makeText(holder.mCategoryName.getContext(),"Must have at least 20 Michelin stars to unlock!",Toast.LENGTH_SHORT).show();
-                } else if (currentPoints < 30 && currentCategory.getStrCategory().contentEquals("Miscellaneous")) {
+                } else if (currentPoints < 30 && currentCategory.getStrCategory().contentEquals("Dessert")) {
                     Toast.makeText(holder.mCategoryName.getContext(),"Must have at least 30 Michelin stars to unlock!",Toast.LENGTH_SHORT).show();
                 } else {
 

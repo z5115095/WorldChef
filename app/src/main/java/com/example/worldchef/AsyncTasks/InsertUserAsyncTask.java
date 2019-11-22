@@ -33,10 +33,6 @@ public class InsertUserAsyncTask extends AsyncTask<User, Integer, String> {
 
         db.userDao().insertUser(users[0]);
 
-        // When the task is finished, it will return.
-        // You would normally want to return the result of your task.
-        // For example, if my task was to get books from DB, I would make this method return the list
-        // of books. The return value goes straight to onPostExecute.
         return "Successfully registered!";
     }
 

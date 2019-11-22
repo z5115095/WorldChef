@@ -26,6 +26,7 @@ import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, AsyncTaskUserDelegate {
 
+    //Spinner for Gender was adapted from: https://www.youtube.com/watch?v=on_OrrX7Nw4
     private EditText mFirstName;
     private EditText mLastName;
     private EditText mEmail;

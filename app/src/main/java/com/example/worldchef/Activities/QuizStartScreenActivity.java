@@ -32,7 +32,8 @@ import static com.example.worldchef.Activities.MainScreenActivity.username;
 
 public class QuizStartScreenActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, AsyncTaskQuizDelegate, AsyncTaskUserDelegate {
 
-    //Quiz implementation adapted from : https://www.youtube.com/watch?v=pEDVdSUuWXE
+    //Spinner for Category was adapted from: https://www.youtube.com/watch?v=on_OrrX7Nw4
+    //Quiz implementation adapted from : https://www.youtube.com/watch?v=pEDVdSUuWXE - (and the rest of the series of that link)
     private Button mStartQuizButton;
     private Spinner mCategorySpinner;
     private String categorySelected = " ";
@@ -647,9 +648,9 @@ public class QuizStartScreenActivity extends AppCompatActivity implements Adapte
         if(currentUser.getPoints() < 10 && (currentUser.getPoints() + score) >=10) {
             Toast.makeText(QuizStartScreenActivity.this,"Congratulations you have unlocked the Goat Category!",Toast.LENGTH_SHORT).show();
         } else if (currentUser.getPoints() < 20 && (currentUser.getPoints() + score) >=20) {
-            Toast.makeText(QuizStartScreenActivity.this,"Congratulations you have unlocked the Dessert Category!",Toast.LENGTH_SHORT).show();
-        } else if (currentUser.getPoints() < 30 && (currentUser.getPoints() + score) >=30) {
             Toast.makeText(QuizStartScreenActivity.this,"Congratulations you have unlocked the Miscellaneous Category!",Toast.LENGTH_SHORT).show();
+        } else if (currentUser.getPoints() < 30 && (currentUser.getPoints() + score) >=30) {
+            Toast.makeText(QuizStartScreenActivity.this,"Congratulations you have unlocked the Dessert Category!",Toast.LENGTH_SHORT).show();
         }
     }
 }
